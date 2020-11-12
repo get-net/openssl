@@ -14,7 +14,10 @@
 
 package openssl
 
-// #include "shim.h"
+/*
+#include "shim.h"
+#include "openssl/engine.h"
+*/
 import "C"
 
 import (
