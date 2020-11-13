@@ -283,12 +283,15 @@ func LoadPrivateKeyFromEngine(engine *Engine, key_id string) (PrivateKey, error)
 	ckey_id := C.CString(key_id)
 	defer C.free(unsafe.Pointer(ckey_id))
 
-	key := C.ENGINE_load_private_key(&engine, ckey_id, 0, 0)
+	key := C.ENGINE_load_private_key(engine.e, ckey_id, nil, nil)
 	if key == nil {
 		return nil, errors.New("ENGINE_load_private_key() failed")
 	}
 
 	p := &pKey{key: key}
+	runtime.SetFinalizer(p, func(p *pKey) {
+		C.X_EVP_PKEY_free(p.key)
+	})
 	return p, nil
 }
 
@@ -371,6 +374,22 @@ func LoadPrivateKeyFromDER(der_block []byte) (PrivateKey, error) {
 func LoadPrivateKeyFromPEMWidthPassword(pem_block []byte, password string) (
 	PrivateKey, error) {
 	return LoadPrivateKeyFromPEMWithPassword(pem_block, password)
+}
+
+func LoadPublicKeyFromEngine(engine *Engine, key_id string) (PublicKey, error) {
+	if engine == nil {
+		return nil, errors.New("engine not found")
+	}
+	ckey_id := C.CString(key_id)
+	defer C.free(unsafe.Pointer(ckey_id))
+
+	key := C.ENGINE_load_public_key(engine.e, ckey_id, nil, nil)
+	if key == nil {
+		return nil, errors.New("ENGINE_load_public_key() failed")
+	}
+
+	p := &pKey{key: key}
+	return p, nil
 }
 
 // LoadPublicKeyFromPEM loads a public key from a PEM-encoded block.

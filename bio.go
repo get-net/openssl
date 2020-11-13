@@ -125,7 +125,6 @@ func (b *writeBio) WriteTo(w io.Writer) (rv int64, err error) {
 		return 0, nil
 	}
 	n, err := w.Write(data)
-
 	// subtract however much data we wrote from the buffer
 	b.data_mtx.Lock()
 	b.buf = b.buf[:copy(b.buf, b.buf[n:])]

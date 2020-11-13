@@ -25,6 +25,10 @@ import (
 	"unsafe"
 )
 
+const (
+	EngineMethodAll = 0xFFFF
+)
+
 type Engine struct {
 	e *C.ENGINE
 }
@@ -48,3 +52,18 @@ func EngineById(name string) (*Engine, error) {
 	})
 	return e, nil
 }
+
+//
+//
+//func EngineSetDefault(engine *Engine) error {
+//	if engine == nil || engine.e == nil {
+//		return errors.New("engine is nil")
+//	}
+//
+//	status := C.ENGINE_set_default(engine.e, EngineMethodAll)
+//	if status != 0 {
+//		return fmt.Errorf("failed register methods")
+//	}
+//
+//	return nil
+//}
