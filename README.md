@@ -2,6 +2,13 @@
 
 Please see http://godoc.org/github.com/spacemonkeygo/openssl for more info
 
+## Extension version
+
+Now added
+
+* Load key from engine
+* Create simple signature with pkcs#7
+
 ### License
 
 Copyright (C) 2017. See AUTHORS.
