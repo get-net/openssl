@@ -7,22 +7,7 @@ import (
 
 func TestCmsSign(t *testing.T) {
 
-	//engine, err := EngineById("gostengy")
-	//if err != nil {
-	//	t.Fatal(err)
-	//}
-	//
-	//err = EngineSetDefault(engine)
-	//if err != nil {
-	//	t.Fatal(err)
-	//}
-	//
-	//key, err := LoadPrivateKeyFromEngine(engine, "c:OOO_GETNET_1595311686391")
-	//if err != nil {
-	//	t.Fatal(err)
-	//}
-
-	keyBytes, err := ioutil.ReadFile("id.get-net.ru.key")
+	keyBytes, err := ioutil.ReadFile("test.key")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -32,7 +17,7 @@ func TestCmsSign(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	certBytes, err := ioutil.ReadFile("id.get-net.ru.cert")
+	certBytes, err := ioutil.ReadFile("test.cert")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -471,21 +471,3 @@ func TestMarshalEd25519(t *testing.T) {
 		t.Fatal(err)
 	}
 }
-
-func TestLoadKeyFormEngine(t *testing.T) {
-	engine, err := EngineById("gostengy")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	_, err = LoadPrivateKeyFromEngine(engine, "c:OOO_GETNET_1595311686391")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	//_, err = LoadPublicKeyFromEngine(engine, "39da49123dbe70e953f394074d586eb692f3328e")
-	//if err != nil {
-	//	t.Fatal(err)
-	//}
-
-}
