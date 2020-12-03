@@ -753,11 +753,20 @@ int X_HMAC_Final(HMAC_CTX *ctx, unsigned char *md, unsigned int *len) {
 	return HMAC_Final(ctx, md, len);
 }
 
+
+STACK_OF(X509) *X_sk_X509_new_null() {
+    return sk_X509_new_null();
+}
+
+int X_sk_X509_push(STACK_OF(X509) *sk, X509 *x) {
+    return sk_X509_push(sk, x);
+}
+
 int X_sk_X509_num(STACK_OF(X509) *sk) {
 	return sk_X509_num(sk);
 }
 
-X509 *X_sk_X509_value(STACK_OF(X509)* sk, int i) {
+X509 *X_sk_X509_value(STACK_OF(X509) *sk, int i) {
    return sk_X509_value(sk, i);
 }
 

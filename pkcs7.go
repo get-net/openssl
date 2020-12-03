@@ -3,6 +3,7 @@ package openssl
 /*
 #include <openssl/pkcs7.h>
 #include <openssl/pkcs7err.h>
+#include "shim.h"
 */
 import "C"
 import (
@@ -131,15 +132,15 @@ func PKCS7Encrypt(certs []*Certificate, data []byte, cipher Cipher, flags int) (
 		return nil, errors.New("empty data block")
 	}
 
-	//var sk *C.struct_stack_st_X509
+	//	var sk *C.struct_stack_st_X509
 
-	sk := C.OPENSSL_sk_new_null()
+	sk := C.X_sk_X509_new_null()
 	if sk == nil {
 		return nil, errors.New("can't create new stack")
 	}
 
 	for _, cert := range certs {
-		res := C.OPENSSL_sk_push(sk, cert.x)
+		res := C.X_sk_X509_push(sk, cert.x)
 		if res == 0 {
 			return nil, errors.New("can't add cert into stack")
 		}
