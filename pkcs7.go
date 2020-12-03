@@ -121,7 +121,45 @@ func (pkcs7 *PKCS7) SMIMEWritePKCS7(data []byte, flags int) (der_block []byte, e
 	return ioutil.ReadAll(asAnyBio(out))
 }
 
-func PKCS7Verify(pkcs7 PKCS7) {
+func PKCS7Encrypt(certs []*Certificate, data []byte, cipher Cipher, flags int) (*PKCS7, error) {
+
+	if len(certs) == 0 {
+		return nil, errors.New("recipient certificates not found")
+	}
+
+	if len(data) == 0 {
+		return nil, errors.New("empty data block")
+	}
+
+	//var sk *C.struct_stack_st_X509
+
+	sk := C.sk_X509_new_null()
+	if sk == nil {
+		return nil, errors.New("can't create new stack")
+	}
+
+	for _, cert := range certs {
+		res := C.sk_X509_push(sk, cert.x)
+		if res == 0 {
+			return nil, errors.New("can't add cert into stack")
+		}
+	}
+
+	bio := C.BIO_new_mem_buf(unsafe.Pointer(&data[0]),
+		C.int(len(data)))
+	if bio == nil {
+		return nil, errors.New("failed creating bio")
+	}
+	defer C.BIO_free(bio)
+
+	pkcs7 := C.PKCS7_encrypt(sk, bio, cipher.ptr, C.int(flags))
+	if pkcs7 == nil {
+		return nil, errors.New("failed create signature pkcs7")
+	}
+
+	p := &PKCS7{pkcs7: pkcs7}
+
+	return p, nil
 }
 
 // int PKCS7_verify(PKCS7 *p7, STACK_OF(X509) *certs, X509_STORE *store, BIO *indata, BIO *out, int flags);
