@@ -133,13 +133,13 @@ func PKCS7Encrypt(certs []*Certificate, data []byte, cipher Cipher, flags int) (
 
 	//var sk *C.struct_stack_st_X509
 
-	sk := C.sk_X509_new_null()
+	sk := C.OPENSSL_sk_new_null()
 	if sk == nil {
 		return nil, errors.New("can't create new stack")
 	}
 
 	for _, cert := range certs {
-		res := C.sk_X509_push(sk, cert.x)
+		res := C.OPENSSL_sk_push(sk, cert.x)
 		if res == 0 {
 			return nil, errors.New("can't add cert into stack")
 		}
