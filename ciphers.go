@@ -14,7 +14,10 @@
 
 package openssl
 
-// #include "shim.h"
+/*
+#include "shim.h"
+#include <openssl/engine.h>
+*/
 import "C"
 
 import (
@@ -84,6 +87,14 @@ func GetCipherByNid(nid NID) (*Cipher, error) {
 		return nil, err
 	}
 	return GetCipherByName(sn)
+}
+
+func GetCipherFromEngineByNid(engine *Engine, nid NID) (*Cipher, error) {
+	p := C.ENGINE_get_cipher(engine.e, C.int(nid))
+	if p == nil {
+		return nil, fmt.Errorf("NID %d not found", nid)
+	}
+	return &Cipher{ptr: p}, nil
 }
 
 type cipherCtx struct {

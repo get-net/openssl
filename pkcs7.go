@@ -155,7 +155,7 @@ func PKCS7Encrypt(certs []*Certificate, data []byte, cipher Cipher, flags int) (
 
 	pkcs7 := C.PKCS7_encrypt(sk, bio, cipher.ptr, C.int(flags))
 	if pkcs7 == nil {
-		return nil, errors.New("failed create signature pkcs7")
+		return nil, errors.New("failed create encrypt pkcs7")
 	}
 
 	p := &PKCS7{pkcs7: pkcs7}
